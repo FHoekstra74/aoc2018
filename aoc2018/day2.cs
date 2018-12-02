@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 
 namespace aoc2018
@@ -73,7 +74,6 @@ namespace aoc2018
                             {
                                 if (line[i].Equals(line2[i]))
                                     thisres += line[i].ToString();
-
                             }
                             combidict.Add(combination, thisres);
                         }
@@ -81,19 +81,8 @@ namespace aoc2018
                 }
             }
 
-            int result = 0;
-            string bestmacht = "";
-
-            foreach (var item in combidict)
-            {
-                if (item.Value.Length > result)
-                {
-                    result = item.Value.Length;
-                    bestmacht = item.Value;
-                }
-            }
-
-            Console.WriteLine("Answer 1: {0}", bestmacht);
+            string result = combidict.Values.Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur);
+            Console.WriteLine("Answer 1: {0}", result);
         }
     }
 }
