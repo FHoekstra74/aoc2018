@@ -8,9 +8,8 @@ namespace aoc2018
     {
         static void Main(string[] args)
         {
-            day2 thisday = new day2();
-            thisday.go2();
-
+            day2.go2();
+            Console.ReadKey();
         }
     }
 }

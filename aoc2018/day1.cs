@@ -9,7 +9,7 @@ namespace aoc2018
 {
     public class day1
     {
-        public void go()
+        public static void go()
         {
             int result = 0;
             var values = File.ReadAllLines(@"C:\aoc2018\1\input.txt").Select(line => int.Parse(line));
@@ -17,9 +17,8 @@ namespace aoc2018
             Console.WriteLine("Answer 1: {0}", values.Sum());
 
             var dict = new Dictionary<int, int>();
-            bool ready = false;
 
-            while (!ready)
+            while (true)
             {
                 foreach (int val in values)
                 {
@@ -27,12 +26,9 @@ namespace aoc2018
 
                     if (dict.ContainsKey(result))
                     {
-                        if (!ready)
-                        {
-                            Console.WriteLine("Answer 2: {0}", result.ToString());
-                            ready = true;
-                        }
-                    }
+                        Console.WriteLine("Answer 2: {0}", result.ToString());
+                        return;
+                }
                     else
                         dict.Add(result, 1);
                 }

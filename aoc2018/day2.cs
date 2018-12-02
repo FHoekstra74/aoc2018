@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace aoc2018
 {
-    class day2
+    public class day2
     {
-        public void go1()
+        public static void go1()
         {
             int twos = 0;
             int threes = 0;
-            string[] lines = System.IO.File.ReadAllLines(@"C:\aoc2018\2\input.txt");
+            string[] lines = File.ReadAllLines(@"C:\aoc2018\2\input.txt");
 
             foreach (string line in lines)
             {
-
                 var dict = new Dictionary<int, int>();
 
                 foreach (char c in line)
@@ -51,16 +51,14 @@ namespace aoc2018
             Console.WriteLine("Answer 1: {0}", result.ToString());
         }
 
-        public void go2()
+        public static void go2()
         {
-            string[] lines = System.IO.File.ReadAllLines(@"C:\aoc2018\2\input.txt");
-            string[] lines2 = lines;
-
+            string[] lines = File.ReadAllLines(@"C:\aoc2018\2\input.txt");
             var combidict = new Dictionary<string, string>();
 
             foreach (string line in lines)
             {
-                foreach (string line2 in lines2)
+                foreach (string line2 in lines)
                 {
                     if (!line.Equals(line2))
                     {
@@ -82,7 +80,7 @@ namespace aoc2018
             }
 
             string result = combidict.Values.Aggregate("", (max, cur) => max.Length > cur.Length ? max : cur);
-            Console.WriteLine("Answer 1: {0}", result);
+            Console.WriteLine("Answer 2: {0}", result);
         }
     }
 }
