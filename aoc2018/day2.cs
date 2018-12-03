@@ -9,7 +9,7 @@ namespace aoc2018
 {
     public class day2
     {
-        public static void go1()
+        public static void Go1()
         {
             int twos = 0;
             int threes = 0;
@@ -51,7 +51,7 @@ namespace aoc2018
             Console.WriteLine("Answer 1: {0}", result.ToString());
         }
 
-        public static void go2()
+        public static void Go2()
         {
             string[] lines = File.ReadAllLines(@"C:\aoc2018\2\input.txt");
             var combidict = new Dictionary<string, string>();
@@ -64,7 +64,7 @@ namespace aoc2018
                     {
                         string combination = line + '-' + line2;
 
-                        if (!combidict.ContainsKey(combination))
+                        if (!combidict.ContainsKey(combination) && !combidict.ContainsKey(line2 + '-' + line))
                         {
                             string thisres = string.Empty;
 

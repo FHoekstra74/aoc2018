@@ -9,7 +9,7 @@ namespace aoc2018
 {
     public class day1
     {
-        public static void go()
+        public static void Go()
         {
             int result = 0;
             var values = File.ReadAllLines(@"C:\aoc2018\1\input.txt").Select(line => int.Parse(line));
@@ -28,7 +28,7 @@ namespace aoc2018
                     {
                         Console.WriteLine("Answer 2: {0}", result.ToString());
                         return;
-                }
+                    }
                     else
                         dict.Add(result, 1);
                 }
