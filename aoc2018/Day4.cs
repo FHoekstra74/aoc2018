@@ -22,28 +22,28 @@ namespace aoc2018
 
             foreach (Observation observation in observations)
             {
-                if (observation.action == Action.BeginShift)
+                switch (observation.action)
                 {
-                    currentGuard = observation.guard;
-                }
-                if (observation.action == Action.FallAsleep)
-                {
-                    startmMinute = observation.date.Minute;
-                }
-                if (observation.action == Action.WakeUp)
-                {
-                    if (!guartTotalMinutesAsleep.ContainsKey(currentGuard))
-                        guartTotalMinutesAsleep.Add(currentGuard, 0);
+                    case Action.BeginShift:
+                        currentGuard = observation.guard;
+                        break;
+                    case Action.FallAsleep:
+                        startmMinute = observation.date.Minute;
+                        break;
+                    case Action.WakeUp:
+                        if (!guartTotalMinutesAsleep.ContainsKey(currentGuard))
+                            guartTotalMinutesAsleep.Add(currentGuard, 0);
 
-                    guartTotalMinutesAsleep[currentGuard] += (observation.date.Minute - startmMinute);
-                    for (int i = startmMinute; i < observation.date.Minute; i++)
-                    {
-                        string key = currentGuard + '-' + i.ToString();
-                        if (!guartAsleepPerMinute.ContainsKey(key))
-                            guartAsleepPerMinute.Add(key, 0);
+                        guartTotalMinutesAsleep[currentGuard] += (observation.date.Minute - startmMinute);
+                        for (int i = startmMinute; i < observation.date.Minute; i++)
+                        {
+                            string key = currentGuard + '-' + i.ToString();
+                            if (!guartAsleepPerMinute.ContainsKey(key))
+                                guartAsleepPerMinute.Add(key, 0);
 
-                        guartAsleepPerMinute[key] += 1;
-                    }
+                            guartAsleepPerMinute[key] += 1;
+                        }
+                        break;
                 }
             }
 
