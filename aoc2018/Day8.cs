@@ -53,13 +53,7 @@ namespace aoc2018
 
             public int sumMeta()
             {
-                int res = 0;
-                res += metadata.Sum();
-                foreach (Node child in children)
-                {
-                    res += child.sumMeta();
-                }
-                return res;
+                return children.Sum(c => c.sumMeta()) + metadata.Sum();
             }
 
             public int value ()
