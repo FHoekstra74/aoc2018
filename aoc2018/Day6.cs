@@ -19,9 +19,7 @@ namespace aoc2018
             int maxy = points.Max(c => c.y);
 
             char[,] grid = new char[maxx + 1, maxy + 1];
-
             Random rnd = new Random();
-
             char id = 'a';
             foreach (Point point in points)
             {
@@ -31,10 +29,9 @@ namespace aoc2018
             }
 
             int answer2count = 0;
-
+            List<Point> savePoints = new List<Point>();
             for (int x = 0; x <= maxx; x++)
             {
-
                 for (int y = 0; y <= maxy; y++)
                 {
                     var dist = new Dictionary<char, int>();
@@ -47,7 +44,10 @@ namespace aoc2018
                     }
 
                     if (total < 10000)
+                    {
                         answer2count += 1;
+                        savePoints.Add(new Point(string.Format ("{0}, {1}",x,y)));
+                    }
 
                     var closest = dist.Where(p => p.Value == dist.Values.Min());
                     if (closest.Count() == 1)
@@ -64,24 +64,16 @@ namespace aoc2018
             for (int x = 0; x < maxx; x++)
             {
                 if (!edges.Contains(grid[x, 0]))
-                {
                     edges.Add(grid[x, 0]);
-                }
                 if (!edges.Contains(grid[x, maxy]))
-                {
                     edges.Add(grid[x, maxy]);
-                }
             }
             for (int y = 0; y < maxy; y++)
             {
                 if (!edges.Contains(grid[0, y]))
-                {
                     edges.Add(grid[0, y]);
-                }
                 if (!edges.Contains(grid[maxx, y]))
-                {
                     edges.Add(grid[maxx, y]);
-                }
             }
 
             foreach (char c in edges)
@@ -95,10 +87,9 @@ namespace aoc2018
             int max = 0;
             foreach (Point point in points)
             {
-                if (!point.isedge)
+                if (!point.isedge && point.count > max)
                 {
-                    if (point.count > max)
-                        max = point.count;
+                    max = point.count;
                 }
             }
 
@@ -132,6 +123,10 @@ namespace aoc2018
                 {
                     bitmap.SetPixel(point.x -minx, point.y -miny, Color.Black);
                 }
+                foreach (Point point in savePoints)
+                {
+                    bitmap.SetPixel(point.x - minx, point.y - miny, Color.White);
+                }
 
                 bitmap.Save(@"C:\aoc2018\6\image.bmp", ImageFormat.Bmp);
                 bitmap.Save(@"C:\aoc2018\6\image.jpg", ImageFormat.Jpeg);
@@ -157,7 +152,6 @@ namespace aoc2018
             }
 
             public int x { get; }
-
             public int y { get; }
             public char id { get; set; }
             public int count { get; set; }
