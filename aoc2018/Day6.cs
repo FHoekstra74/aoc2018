@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace aoc2018
 {
@@ -17,10 +20,13 @@ namespace aoc2018
 
             char[,] grid = new char[maxx + 1, maxy + 1];
 
+            Random rnd = new Random();
+
             char id = 'a';
             foreach (Point point in points)
             {
                 point.id = id++;
+                point.color = Color.FromArgb(rnd.Next(256), rnd.Next(256), rnd.Next(256));
                 grid[point.x, point.y] = char.ToUpper(point.id);
             }
 
@@ -55,7 +61,7 @@ namespace aoc2018
             }
 
             List<char> edges = new List<char>();
-            for (var x = 0; x < maxx; x++)
+            for (int x = 0; x < maxx; x++)
             {
                 if (!edges.Contains(grid[x, 0]))
                 {
@@ -66,7 +72,7 @@ namespace aoc2018
                     edges.Add(grid[x, maxy]);
                 }
             }
-            for (var y = 0; y < maxy; y++)
+            for (int y = 0; y < maxy; y++)
             {
                 if (!edges.Contains(grid[0, y]))
                 {
@@ -80,8 +86,7 @@ namespace aoc2018
 
             foreach (char c in edges)
             {
-                //Console.WriteLine(c.ToString());
-                if (c !=  '.')
+                if (c != '.')
                 {
                     points.First(p => p.id == c).isedge = true;
                 }
@@ -90,14 +95,48 @@ namespace aoc2018
             int max = 0;
             foreach (Point point in points)
             {
-//                Console.WriteLine("id: {0} count: {1}", point.id, point.count);
                 if (!point.isedge)
                 {
                     if (point.count > max)
                         max = point.count;
                 }
             }
-            
+
+            int minx = points.Min(c => c.x) -1;
+            int miny = points.Min(c => c.y) -1;
+
+            using (Bitmap bitmap = new Bitmap(maxx - minx + 2, maxy - miny + 2))
+            {
+                for (int x = minx; x < maxx; x++)
+                {
+                    for (int y = miny; y < maxy; y++)
+                    {
+                        char val = grid[x, y];
+                        if (val != '.')
+                        {
+                            Point p = points.First(p1 => p1.id == val);
+                            if (!p.isedge)
+                            {
+                                bitmap.SetPixel(x - minx, y-miny, p.color);
+                            }
+                            else
+                            {
+                                bitmap.SetPixel(x-minx , y-miny, Color.Black);
+                            }
+                        }
+                        else
+                            bitmap.SetPixel(x-minx, y-miny, Color.White);
+                    }
+                }
+                foreach (Point point in points)
+                {
+                    bitmap.SetPixel(point.x -minx, point.y -miny, Color.Black);
+                }
+
+                bitmap.Save(@"C:\aoc2018\6\image.bmp", ImageFormat.Bmp);
+                bitmap.Save(@"C:\aoc2018\6\image.jpg", ImageFormat.Jpeg);
+            }
+
             Console.WriteLine("Answer1: {0}", max);
             Console.WriteLine("Answer2: {0}", answer2count);
         }
@@ -123,6 +162,7 @@ namespace aoc2018
             public char id { get; set; }
             public int count { get; set; }
             public bool isedge { get; set; }
+            public Color color { get; set; }
         }
     }
 }
