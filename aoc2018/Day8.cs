@@ -1,0 +1,88 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+
+namespace aoc2018
+{
+    class Day8
+    {
+        public static void Go()
+        {
+            string[] lines = File.ReadAllLines(@"C:\aoc2018\8\input.txt");
+            string input = lines[0];
+
+            //input = "2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2";
+
+            List<int> thelist = input.Split(" ").Select(item => int.Parse(item)).ToList();
+
+            int startpos = 0;
+            Node startnode = readNodepart(thelist, ref startpos);
+
+            int result = 0;
+            addchildrencount(startnode, ref result);
+            Console.WriteLine("result a: {0}", result);
+            Console.WriteLine("result b: {0}", startnode.value());
+        }
+
+        public static Node readNodepart(List<int> numbers, ref int pos)
+        {
+            var node = new Node();
+            var children = numbers[pos++];
+            var metadata = numbers[pos++];
+            for (int j = 0; j < children; j++)
+            {
+                node.children.Add(readNodepart(numbers, ref pos));
+            }
+
+            for (int j = 0; j < metadata; j++)
+            {
+                node.metadata.Add(numbers[pos++]);
+            }
+
+            return node;
+        }
+
+        static void addchildrencount(Node node, ref int total)
+        {
+            total += node.metadata.Sum(); 
+            foreach (Node node2 in node.children)
+            {
+                addchildrencount(node2, ref total);
+            }
+        }
+
+        public class Node
+        {
+            public Node ()
+            {
+                children = new List<Node>();
+                metadata = new List<int>();
+            }
+
+            public List<Node> children { get; set; }
+            public List<int> metadata { get; set; }
+
+            public int value ()
+            {
+                int res = 0;
+                if (children.Count == 0)
+                {
+                    res = metadata.Sum();
+                }
+                else
+                {
+                    foreach (int metavalue in metadata)
+                    {
+                        if (metavalue <= children.Count)
+                        {
+                            res += children[metavalue-1].value();
+                        }
+                    }
+                }
+                return res;
+            }
+        }
+    }
+}
