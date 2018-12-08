@@ -12,25 +12,21 @@ namespace aoc2018
         {
             string[] lines = File.ReadAllLines(@"C:\aoc2018\8\input.txt");
             string input = lines[0];
-
             //input = "2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2";
 
             List<int> thelist = input.Split(" ").Select(item => int.Parse(item)).ToList();
-
             int startpos = 0;
             Node startnode = readNodepart(thelist, ref startpos);
 
-            int result = 0;
-            addchildrencount(startnode, ref result);
-            Console.WriteLine("result a: {0}", result);
+            Console.WriteLine("result a: {0}", startnode.sumMeta());
             Console.WriteLine("result b: {0}", startnode.value());
         }
 
         public static Node readNodepart(List<int> numbers, ref int pos)
         {
-            var node = new Node();
-            var children = numbers[pos++];
-            var metadata = numbers[pos++];
+            Node node = new Node();
+            int children = numbers[pos++];
+            int metadata = numbers[pos++];
             for (int j = 0; j < children; j++)
             {
                 node.children.Add(readNodepart(numbers, ref pos));
@@ -43,16 +39,7 @@ namespace aoc2018
 
             return node;
         }
-
-        static void addchildrencount(Node node, ref int total)
-        {
-            total += node.metadata.Sum(); 
-            foreach (Node node2 in node.children)
-            {
-                addchildrencount(node2, ref total);
-            }
-        }
-
+        
         public class Node
         {
             public Node ()
@@ -63,6 +50,17 @@ namespace aoc2018
 
             public List<Node> children { get; set; }
             public List<int> metadata { get; set; }
+
+            public int sumMeta()
+            {
+                int res = 0;
+                res += metadata.Sum();
+                foreach (Node child in children)
+                {
+                    res += child.sumMeta();
+                }
+                return res;
+            }
 
             public int value ()
             {
