@@ -108,11 +108,17 @@ namespace aoc2018
                             Point p = points.First(p1 => p1.id == val);
                             if (!p.isedge)
                             {
-                                bitmap.SetPixel(x - minx, y-miny, p.color);
+                                if (savePoints.Any(p1 => p1.x==x && p1.y==y))
+                                    bitmap.SetPixel(x - minx, y-miny, ChangeColorBrightness( p.color, (float)-0.5));
+                                else
+                                    bitmap.SetPixel(x - minx, y - miny, p.color);
                             }
                             else
                             {
-                                bitmap.SetPixel(x-minx , y-miny, Color.Black);
+                                if (savePoints.Any(p1 => p1.x == x && p1.y == y))
+                                    bitmap.SetPixel(x-minx , y-miny, ChangeColorBrightness(p.color,(float)-0.5));
+                                else
+                                    bitmap.SetPixel(x - minx, y - miny, ChangeColorBrightness(p.color, (float)0.85));
                             }
                         }
                         else
@@ -123,10 +129,6 @@ namespace aoc2018
                 {
                     bitmap.SetPixel(point.x -minx, point.y -miny, Color.Black);
                 }
-                foreach (Point point in savePoints)
-                {
-                    bitmap.SetPixel(point.x - minx, point.y - miny, Color.White);
-                }
 
                 bitmap.Save(@"C:\aoc2018\6\image.bmp", ImageFormat.Bmp);
                 bitmap.Save(@"C:\aoc2018\6\image.jpg", ImageFormat.Jpeg);
@@ -134,6 +136,29 @@ namespace aoc2018
 
             Console.WriteLine("Answer1: {0}", max);
             Console.WriteLine("Answer2: {0}", answer2count);
+        }
+
+        public static Color ChangeColorBrightness(Color color, float correctionFactor)
+        {
+            float red = (float)color.R;
+            float green = (float)color.G;
+            float blue = (float)color.B;
+
+            if (correctionFactor < 0)
+            {
+                correctionFactor = 1 + correctionFactor;
+                red *= correctionFactor;
+                green *= correctionFactor;
+                blue *= correctionFactor;
+            }
+            else
+            {
+                red = (255 - red) * correctionFactor + red;
+                green = (255 - green) * correctionFactor + green;
+                blue = (255 - blue) * correctionFactor + blue;
+            }
+
+            return Color.FromArgb(color.A, (int)red, (int)green, (int)blue);
         }
 
         public static int CalculateManhattanDistance(int x1, int x2, int y1, int y2)

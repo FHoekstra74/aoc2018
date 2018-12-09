@@ -9,7 +9,7 @@ namespace aoc2018
         static void Main(string[] args)
         {
             var watch = Stopwatch.StartNew();
-            Day6.Go();
+            Day9.Go();
             watch.Stop();
 
             Console.WriteLine("Time taken: {0} ms", watch.ElapsedMilliseconds);
