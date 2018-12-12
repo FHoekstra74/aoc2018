@@ -12,9 +12,9 @@ namespace aoc2018
         {
             var lines = File.ReadAllLines(@"C:\aoc2018\12\input.txt");
             string initialstate = lines[0].Split(':')[1].Trim();
-            Dictionary<string, string> notes = lines.Where((x, idx) => idx>1).Select(l => new note(l)).ToDictionary(v => v.left, v => v.right);
+            Dictionary<string, string> notes = lines.Where((x, idx) => idx>1).Select(l => new Note(l)).ToDictionary(v => v.Left, v => v.Right);
             int addedleft = 0;
-            initialstate = extendifneeded(initialstate, ref addedleft);
+            initialstate = Extendifneeded(initialstate, ref addedleft);
             int[] answers = new int[101];
             for (int i = 0 ; i < 100; i++)
             {
@@ -22,16 +22,15 @@ namespace aoc2018
                 string newlist = "..";
                 for (int j = 2; j < initialstate.Length -2; j++)
                 {
-                    test = initialstate[j - 2].ToString() + initialstate[j - 1].ToString() + initialstate[j].ToString() + initialstate[j + 1].ToString() + initialstate[j + 2].ToString();
+                    test = initialstate.Substring(j - 2, 5);
 
                     string newval;
                     if (notes.TryGetValue(test, out newval))
                         newlist += newval;
                     else
                         newlist += '.';
-
                 }
-                initialstate = extendifneeded(newlist, ref addedleft);
+                initialstate = Extendifneeded(newlist, ref addedleft);
 
                 if (i == 19 || i >= 97)
                 {
@@ -55,33 +54,30 @@ namespace aoc2018
             Console.WriteLine("Answer b: {0}", answerb);
         }
 
-        private static string extendifneeded(string thelist, ref int added)
+        private static string Extendifneeded(string thelist, ref int added)
         {
-            for (int j = 0; j < 3; j++)
+            while (!thelist.StartsWith("..."))
             {
-                if (!thelist.StartsWith("..."))
-                {
-                    thelist = "." + thelist;
-                    added++;
-                }
-                if (!thelist.EndsWith("..."))
-                {
-                    thelist = thelist + ".";
-                }
+                thelist = "." + thelist;
+                added++;
+            }
+            while (!thelist.EndsWith("..."))
+            {
+                thelist = thelist + ".";
             }
             return thelist;
         }
 
-        public class note
+        public class Note
         {
-            public note(string input)
+            public Note(string input)
             {
-                left = input.Split("=>")[0].Trim();
-                right = input.Split("=>")[1].Trim();
+                Left = input.Split("=>")[0].Trim();
+                Right = input.Split("=>")[1].Trim();
             }
 
-            public string left { get; }
-            public string right { get; }
+            public string Left { get; }
+            public string Right { get; }
         }
     }
 }
