@@ -15,7 +15,7 @@ namespace aoc2018
             Dictionary<string, string> notes = lines.Where((x, idx) => idx>1).Select(l => new note(l)).ToDictionary(v => v.left, v => v.right);
             int addedleft = 0;
             initialstate = extendifneeded(initialstate, ref addedleft);
-
+            int[] answers = new int[101];
             for (int i = 0 ; i < 100; i++)
             {
                 string test = string.Empty;
@@ -43,12 +43,15 @@ namespace aoc2018
                             count += (j - addedleft);
                         }
                     }
-                    Console.WriteLine("After {0} iterations: {1}", i+1 , count);
+                    answers[i + 1] = count;
                 }
             }
 
+            Console.WriteLine("Answer a: {0}", answers[20]);
+
             //Saw that the string didnt change anymore after just less then 100 iterations, only shifted, so can extend answer from 98 to 50000000000
-            long answerb = 5604 + ((50000000000 - 98) * 40);
+            int stablepoint = 98;
+            long answerb = answers[stablepoint] + ((50000000000 - stablepoint) * (answers[stablepoint + 1] - answers[stablepoint]));
             Console.WriteLine("Answer b: {0}", answerb);
         }
 
